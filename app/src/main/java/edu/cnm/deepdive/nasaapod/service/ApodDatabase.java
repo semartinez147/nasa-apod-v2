@@ -1,7 +1,6 @@
 package edu.cnm.deepdive.nasaapod.service;
 
 import android.app.Application;
-import androidx.annotation.Nullable;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -19,7 +18,7 @@ import java.util.Date;
     version = 1,
     exportSchema = true
 )
-@TypeConverters(Converters.class)
+@TypeConverters({Converters.class, Apod.MediaType.class}) // where to find converters
 public abstract class ApodDatabase extends RoomDatabase {
 
   private static final String DB_NAME = "apod_db";
