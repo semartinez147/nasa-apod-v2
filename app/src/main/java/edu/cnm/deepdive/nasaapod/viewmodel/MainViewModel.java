@@ -64,6 +64,7 @@ public class MainViewModel extends AndroidViewModel {
     return throwable;
   }
 
+  @SuppressLint("CheckResult")
   public void setApodDate(Date date) {
     ApodDao dao = database.getApodDao();
     dao.select(date)
