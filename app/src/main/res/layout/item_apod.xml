@@ -4,18 +4,25 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:padding="8dp">
+  android:padding="@dimen/history_item_padding">
 
   <ImageView
     android:id="@+id/thumbnail"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
+
+
+    android:scaleType="fitCenter"
+    android:adjustViewBounds="true"
+
+
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@+id/title"
     app:layout_constraintHorizontal_weight="3"
-    android:layout_marginEnd="8dp"/>
+    android:layout_marginEnd="@dimen/history_item_padding"/>
+<!--  android:contentDescription is used mainly for accessibility.-->
 
   <TextView
     android:id="@+id/title"
@@ -27,8 +34,8 @@
     app:layout_constraintEnd_toEndOf="@+id/date"
     app:layout_constraintHorizontal_weight="4"
     app:layout_constraintVertical_chainStyle="packed"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="8dp"/>
+    android:layout_marginEnd="@dimen/history_item_padding"
+    android:layout_marginBottom="@dimen/history_item_padding"/>
 
   <TextView
     android:id="@+id/date"
