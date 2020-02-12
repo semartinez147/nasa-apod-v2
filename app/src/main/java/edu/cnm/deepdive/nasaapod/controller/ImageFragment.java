@@ -13,26 +13,19 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import edu.cnm.deepdive.android.DateTimePickerFragment;
-import edu.cnm.deepdive.android.DateTimePickerFragment.Mode;
 import edu.cnm.deepdive.nasaapod.R;
 import edu.cnm.deepdive.nasaapod.model.entity.Apod;
 import edu.cnm.deepdive.nasaapod.viewmodel.MainViewModel;
-import java.util.Calendar;
 
 public class ImageFragment extends Fragment {
 
   private WebView contentView;
   private MainViewModel viewModel;
-  private ProgressBar loading;
-  private FloatingActionButton calendar;
   private Apod apod;
 
   @Override
@@ -46,10 +39,7 @@ public class ImageFragment extends Fragment {
   public View onCreateView(@NonNull LayoutInflater inflater,
       ViewGroup container, Bundle savedInstanceState) {
     View root = inflater.inflate(R.layout.fragment_image, container, false);
-    loading = root.findViewById(R.id.loading);
-    calendar = root.findViewById(R.id.calendar);
     setupWebView(root);
-    setupCalendarPicker(Calendar.getInstance());
     return root;
   }
 
@@ -60,13 +50,10 @@ public class ImageFragment extends Fragment {
     viewModel.getApod().observe(getViewLifecycleOwner(),
         (apod) -> {
           contentView.loadUrl(apod.getUrl());
-          Calendar calendar = Calendar.getInstance();
-          calendar.setTime(apod.getDate());
-          setupCalendarPicker(calendar);
           this.apod = apod;
         });
     viewModel.getThrowable().observe(getViewLifecycleOwner(), (throwable) -> {
-      loading.setVisibility(View.GONE);
+      ((MainActivity) getActivity()).setProgressVisibility(View.GONE);
       Toast toast = Toast.makeText(getActivity(),
           getString(R.string.error_message, throwable.getMessage()), Toast.LENGTH_LONG);
       toast.setGravity(Gravity.BOTTOM, 0,
@@ -114,7 +101,7 @@ public class ImageFragment extends Fragment {
 
       @Override
       public void onPageFinished(WebView view, String url) {
-        loading.setVisibility(View.GONE);
+        ((MainActivity) getActivity()).setProgressVisibility(View.GONE);
         Toast toast = Toast.makeText(getActivity(), apod.getTitle(), Toast.LENGTH_LONG);
         toast.setGravity(Gravity.BOTTOM, 0, (int) getContext().getResources()
             .getDimensionPixelOffset(R.dimen.toast_vertical_margin));
@@ -128,19 +115,6 @@ public class ImageFragment extends Fragment {
     settings.setDisplayZoomControls(false);
     settings.setUseWideViewPort(true);
     settings.setLoadWithOverviewMode(true);
-  }
-
-  private void setupCalendarPicker(Calendar calendar) {
-    this.calendar.setOnClickListener((v) -> {
-      DateTimePickerFragment fragment = new DateTimePickerFragment();
-      fragment.setCalendar(calendar);
-      fragment.setMode(Mode.DATE);
-      fragment.setOnChangeListener((cal) -> {
-        loading.setVisibility(View.VISIBLE);
-        viewModel.setApodDate(cal.getTime());
-      });
-      fragment.show(getChildFragmentManager(), fragment.getClass().getName());
-    });
   }
 
 }

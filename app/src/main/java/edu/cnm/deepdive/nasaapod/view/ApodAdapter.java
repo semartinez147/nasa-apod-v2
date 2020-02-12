@@ -38,8 +38,9 @@ public class ApodAdapter extends ArrayAdapter<ApodWithStats> {
     ApodWithStats apod = getItem(position);
     title.setText(apod.getApod().getTitle());
     date.setText(DateFormat.getMediumDateFormat(getContext()).format(apod.getApod().getDate()));
+    String countQuantity = getContext().getResources().getQuantityString(R.plurals.access_count, apod.getAccessCount());
     access.setText(getContext().getString(R.string.access_format, apod.getAccessCount(),
-        DateFormat.getMediumDateFormat(getContext()).format(apod.getLastAccess())));
+        DateFormat.getMediumDateFormat(getContext()).format(apod.getLastAccess()), countQuantity));
     if (apod.getApod().getMediaType() == MediaType.IMAGE) {
       Picasso.get().load(apod.getApod().getUrl()).into(thumbnail);
     } else{
